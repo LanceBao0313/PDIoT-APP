@@ -7,7 +7,7 @@
     <string name="title_activity_on_boarding">OnBoardingActivity</string>
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
-
+    <string name="guest">Continue as guest</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_fab_animations">FAB Animation</string>
@@ -52,4 +52,23 @@
     <string name="thingy_accel">Accel = (%1$.3f, %2$.3f, %3$.3f)</string>
     <string name="thingy_gyro">Gyro = (%1$.3f, %2$.3f, %3$.3f)</string>
     <string name="thingy_mag">Mag = (%1$.3f, %2$.3f, %3$.3f)</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+
+    <string name="swipe_left_for_register">Swipe Left for Register</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="e_mail">Email</string>
+    <string name="tag">Sign in to view your historical activity!</string>
+    <string name="swipe_right_for_login">Swipe Right for Login</string>
+    <string name="register">Register</string>
+    <string name="re_type_password">Re-type Password</string>
+    <string name="your_name">Full Name</string>
 </resources>

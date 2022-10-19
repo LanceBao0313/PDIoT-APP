@@ -20,7 +20,10 @@ import com.specknet.pdiotapp.R
 import com.specknet.pdiotapp.utils.Constants
 import com.specknet.pdiotapp.utils.RESpeckLiveData
 import com.specknet.pdiotapp.utils.ThingyLiveData
+import org.tensorflow.lite.DataType
+import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
 import kotlin.collections.ArrayList
+import com.specknet.pdiotapp.ml.TfLiteModel
 
 
 class LiveDataActivity : AppCompatActivity() {
@@ -35,6 +38,12 @@ class LiveDataActivity : AppCompatActivity() {
     lateinit var dataSet_thingy_accel_z: LineDataSet
 
     var time = 0f
+    var a3 = 0
+    var activities = arrayOf("standing", "sitting", "sitting forward", "sitting backward", "lying up",
+    "lying down", "lying left", "lying right", "walking", "running", "walk upstairs", "walk downstaris",
+    "deskwork", "movement", "movement", "movement", "movement", "movement")
+    lateinit var currentActivity : String
+
     lateinit var allRespeckData: LineData
 
     lateinit var allThingyData: LineData
@@ -47,7 +56,9 @@ class LiveDataActivity : AppCompatActivity() {
     lateinit var thingyLiveUpdateReceiver: BroadcastReceiver
     lateinit var looperRespeck: Looper
     lateinit var looperThingy: Looper
-
+    var tfinput = FloatArray(50*6){0.toFloat()}
+    var counter = 0
+//    var tfinput = Array<FloatArray>(50,6)
     val filterTestRespeck = IntentFilter(Constants.ACTION_RESPECK_LIVE_BROADCAST)
     val filterTestThingy = IntentFilter(Constants.ACTION_THINGY_BROADCAST)
 
@@ -75,14 +86,79 @@ class LiveDataActivity : AppCompatActivity() {
                     val x = liveData.accelX
                     val y = liveData.accelY
                     val z = liveData.accelZ
+                    val g_x = liveData.gyro.x
+                    val g_y = liveData.gyro.y
+                    val g_z = liveData.gyro.z
+
+                    modelinput(x,y,z,g_x,g_y,g_z)
+
+                    Log.d("test", "$a3")
+
+
+
+//                    val input = makingdatapacket(x,y,z,g_x,g_y,g_z)
+//
+//                    val model = TfLiteModel.newInstance(context)
+//
+//// Creates inputs for reference.
+//                    val inputFeature0 = TensorBuffer.createFixedSize(intArrayOf(1, 50, 6), DataType.FLOAT32)
+//                    inputFeature0.loadArray(tfinput)
+//
+//// Runs model inference and gets result.
+//                    val outputs = model.process(inputFeature0)
+//                    val outputFeature0 = outputs.outputFeature0AsTensorBuffer
+//                    Log.d("testtest", "${outputFeature0.floatArray[0]}")
+//                    var a = 0f
+//                    var a1 = FloatArray(18){0.toFloat()}
+//                    for(i in 0..17){
+//                        a1[i] = outputFeature0.floatArray[i]
+//                    }
+////                    var max = a1[0]
+////                    var counter1 = 0
+////                    for(j in 1..17 ){
+////                        if (a1[j] >= max){
+////                            max = a1[j]
+////                            counter1 =
+////                        }
+////                    }
+//                    var a3 = 0
+//                    var a2= a1.max()
+//                    if (a2 != null) {
+//
+//                       a3 = a1.indexOf(a2)
+//
+//                    }
+//
+//                    Log.d("index of max", "${a2}")
+//
+//                    Log.d("index of max", "${a3}")
+//
+//
+//// Releases model resources if no longer used.
+//                    model.close()
+//
+//
+//
+//                    print(input)
+//                    assetManager = ctx.assets
+//                    // grab files with tflite extensions
+//                    models =
+//                        assetManager.list(ActivityClassifier.MODEL_DIR)?.filter { f -> f.endsWith(".tflite") }
+//                            .orEmpty()
+//                    Log.i(TAG, "models found: $models")
+//
+//
+//                    val model = .newInstance(context)
+
 
                     time += 1
-
                     updateGraph("respeck", x, y, z)
 
                 }
             }
         }
+
+
 
         // register receiver on another thread
         val handlerThreadRespeck = HandlerThread("bgThreadRespeckLive")
@@ -110,6 +186,7 @@ class LiveDataActivity : AppCompatActivity() {
                     val y = liveData.accelY
                     val z = liveData.accelZ
 
+
                     time += 1
 
                     updateGraph("thingy", x, y, z)
@@ -124,6 +201,7 @@ class LiveDataActivity : AppCompatActivity() {
         looperThingy = handlerThreadThingy.looper
         val handlerThingy = Handler(looperThingy)
         this.registerReceiver(thingyLiveUpdateReceiver, filterTestThingy, null, handlerThingy)
+
     }
 
 
@@ -249,7 +327,52 @@ class LiveDataActivity : AppCompatActivity() {
 
 
     }
+    fun makingdatapacket(x: Float, y: Float, z: Float, x1:Float, y1:Float, z1: Float): Array<Float> {
+        val arraypacket = arrayOf(x,y,z, x1,y1,z1)
+        return arraypacket
 
+    }
+
+    fun modelinput(x: Float, y: Float, z: Float, x1:Float, y1:Float, z1: Float) {
+         if (counter <= 294){
+             this.tfinput.set(counter, x)
+             this.tfinput.set(counter+1, y)
+             this.tfinput.set(counter+2, z)
+             this.tfinput.set(counter+3, x1)
+             this.tfinput.set(counter+4, y1)
+             this.tfinput.set(counter+5, z1)
+             counter += 6
+             Log.d("input", "$tfinput")
+         }else if (counter > 294){
+             val model = TfLiteModel.newInstance(this)
+
+// Creates inputs for reference.
+             val inputFeature0 = TensorBuffer.createFixedSize(intArrayOf(1, 50, 6), DataType.FLOAT32)
+             inputFeature0.loadArray(tfinput)
+
+// Runs model inference and gets result.
+             val outputs = model.process(inputFeature0)
+             val outputFeature0 = outputs.outputFeature0AsTensorBuffer
+             val floatArray = outputFeature0.getFloatArray()
+             Log.d("testtest", "${outputFeature0.floatArray[0]}")
+
+             a3 = 0
+             var a2= floatArray.max()
+             if (a2 != null) {
+                 a3 = floatArray.indexOf(a2)
+                 currentActivity = activities[a3]
+             }
+             Log.d("index of max", "${a3}")
+             Log.d("currentActivity", "${activities[a3]}")
+
+// Releases model resources if no longer used.
+             model.close()
+             this.tfinput = FloatArray(50*6){0.toFloat()}
+             counter = 0
+         }
+
+
+    }
 
     override fun onDestroy() {
         super.onDestroy()

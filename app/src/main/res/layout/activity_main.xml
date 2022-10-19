@@ -2,91 +2,110 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/coordinatorLayout"
+    tools:background="#BEE7DD"
     tools:context=".MainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#C8E3E1"
+        tools:background="#D1E6E1">
 
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/tv_title2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
-            android:text="I want to"
+            android:layout_above="@id/tv_subtitle"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="144dp"
+            android:layout_marginTop="80dp"
+            android:layout_marginEnd="144dp"
+            android:layout_marginBottom="100dp"
+            android:fontFamily="@font/indigo_daisy"
+            android:text="@string/app_name"
+            android:textColor="#28A499"
+            android:textSize="50sp"
+            app:layout_constraintBottom_toTopOf="@+id/pose_button"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
 
         <Button
             android:id="@+id/live_button"
             android:layout_width="600px"
             android:layout_height="wrap_content"
-            android:background="#CDCDCD"
+            android:background="@drawable/btn_custom"
             android:text="Watch live processing"
-            android:textColor="#000000"
-            app:layout_constraintBottom_toTopOf="@+id/ble_button"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView2"
-            app:layout_constraintVertical_bias="0.892" />
-
-        <Button
-            android:id="@+id/ble_button"
-            android:layout_width="600px"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="164dp"
-            android:background="#CDCDCD"
-            android:text="Connect sensors"
             android:textColor="#000000"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintHorizontal_bias="0.516"
             app:layout_constraintStart_toStartOf="parent" />
 
         <Button
             android:id="@+id/pose_button"
             android:layout_width="600px"
             android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"
-            android:background="#CDCDCD"
+            android:background="@drawable/btn_custom"
             android:text="Live Pose"
             android:textColor="#000000"
             app:layout_constraintBottom_toTopOf="@+id/history_button"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.598"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.806" />
+            app:layout_constraintVertical_bias="0.647" />
 
         <Button
             android:id="@+id/history_button"
             android:layout_width="600px"
             android:layout_height="wrap_content"
-            android:layout_marginTop="130dp"
-            android:background="#CDCDCD"
+            android:layout_marginTop="420dp"
+            android:background="@drawable/btn_custom"
             android:text="History"
+            android:textColor="#000000"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/loginButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_custom"
+            android:text="Login"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/record_button"
+            android:layout_width="600px"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="40dp"
+            android:background="@drawable/btn_custom"
+            android:text="Record data"
             android:textColor="#000000"
             app:layout_constraintBottom_toTopOf="@+id/live_button"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView2"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
-        android:id="@+id/record_button"
+        android:id="@+id/ble_button"
         android:layout_width="600px"
         android:layout_height="wrap_content"
-        android:background="#CDCDCD"
-        android:text="Record data"
+        android:layout_marginBottom="352dp"
+        android:background="@drawable/btn_custom"
+        android:text="Connect sensors"
         android:textColor="#000000"
         app:layout_anchor="@+id/constraintLayout"
         app:layout_anchorGravity="center" />

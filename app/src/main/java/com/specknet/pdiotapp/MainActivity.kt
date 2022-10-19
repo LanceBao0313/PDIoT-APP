@@ -33,6 +33,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var recordButton: Button
     lateinit var historyButton: Button
     lateinit var poseButton: Button
+    lateinit var loginButton: Button
 
 
     // permissions
@@ -71,6 +72,7 @@ class MainActivity : AppCompatActivity() {
         recordButton = findViewById(R.id.record_button)
         historyButton = findViewById(R.id.history_button)
         poseButton = findViewById(R.id.pose_button)
+        loginButton = findViewById(R.id.loginButton)
 
         permissionAlertDialog = AlertDialog.Builder(this)
 
@@ -115,6 +117,11 @@ class MainActivity : AppCompatActivity() {
 
         poseButton.setOnClickListener {
             val intent = Intent(this, Pose::class.java)
+            startActivity(intent)
+        }
+
+        loginButton.setOnClickListener {
+            val intent = Intent(this, MainActivity2::class.java)
             startActivity(intent)
         }
     }
