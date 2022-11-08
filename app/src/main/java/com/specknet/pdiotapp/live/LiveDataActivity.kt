@@ -95,62 +95,6 @@ class LiveDataActivity : AppCompatActivity() {
                     Log.d("test", "$a3")
 
 
-
-//                    val input = makingdatapacket(x,y,z,g_x,g_y,g_z)
-//
-//                    val model = TfLiteModel.newInstance(context)
-//
-//// Creates inputs for reference.
-//                    val inputFeature0 = TensorBuffer.createFixedSize(intArrayOf(1, 50, 6), DataType.FLOAT32)
-//                    inputFeature0.loadArray(tfinput)
-//
-//// Runs model inference and gets result.
-//                    val outputs = model.process(inputFeature0)
-//                    val outputFeature0 = outputs.outputFeature0AsTensorBuffer
-//                    Log.d("testtest", "${outputFeature0.floatArray[0]}")
-//                    var a = 0f
-//                    var a1 = FloatArray(18){0.toFloat()}
-//                    for(i in 0..17){
-//                        a1[i] = outputFeature0.floatArray[i]
-//                    }
-////                    var max = a1[0]
-////                    var counter1 = 0
-////                    for(j in 1..17 ){
-////                        if (a1[j] >= max){
-////                            max = a1[j]
-////                            counter1 =
-////                        }
-////                    }
-//                    var a3 = 0
-//                    var a2= a1.max()
-//                    if (a2 != null) {
-//
-//                       a3 = a1.indexOf(a2)
-//
-//                    }
-//
-//                    Log.d("index of max", "${a2}")
-//
-//                    Log.d("index of max", "${a3}")
-//
-//
-//// Releases model resources if no longer used.
-//                    model.close()
-//
-//
-//
-//                    print(input)
-//                    assetManager = ctx.assets
-//                    // grab files with tflite extensions
-//                    models =
-//                        assetManager.list(ActivityClassifier.MODEL_DIR)?.filter { f -> f.endsWith(".tflite") }
-//                            .orEmpty()
-//                    Log.i(TAG, "models found: $models")
-//
-//
-//                    val model = .newInstance(context)
-
-
                     time += 1
                     updateGraph("respeck", x, y, z)
 

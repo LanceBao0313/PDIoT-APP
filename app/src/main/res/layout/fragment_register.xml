@@ -55,7 +55,7 @@
         android:layout_marginBottom="10dp"
         android:background="@drawable/et_custom"
         android:fontFamily="@font/roboto_regular"
-        android:hint="@string/e_mail"
+        android:hint="@string/UNN"
         android:inputType="textEmailAddress"
         android:padding="15dp"
         android:textSize="15sp" />
@@ -102,7 +102,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:layout_marginBottom="307dp"
+            android:layout_marginBottom="211dp"
             android:background="@drawable/btn_custom"
             android:fontFamily="@font/roboto_regular"
             android:text="@string/register"

@@ -38,7 +38,16 @@ android {
 }
 
 dependencies {
-    implementation 'com.microsoft.onnxruntime:onnxruntime-android:latest.release'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+    // pull to refresh
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+    // For Card view
+    implementation 'androidx.cardview:cardview:1.0.0'
+
+    // Chart and graph library
+    implementation 'com.github.blackfizz:eazegraph:1.2.5l@aar'
+    implementation 'com.nineoldandroids:library:2.4.0'
+
     implementation 'org.tensorflow:tensorflow-lite-gpu:2.3.0'
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"

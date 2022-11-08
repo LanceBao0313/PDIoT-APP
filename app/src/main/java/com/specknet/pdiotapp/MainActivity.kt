@@ -22,6 +22,7 @@ import com.specknet.pdiotapp.onboarding.OnBoardingActivity
 import com.specknet.pdiotapp.utils.Constants
 import com.specknet.pdiotapp.utils.Utils
 import com.specknet.pdiotapp.history.HistoricalData
+import com.specknet.pdiotapp.history.PieChartActivity
 import com.specknet.pdiotapp.pose.Pose
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -111,7 +112,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         historyButton.setOnClickListener {
-            val intent = Intent(this, HistoricalData::class.java)
+            //val intent = Intent(this, HistoricalData::class.java)
+            val intent = Intent(this, PieChartActivity::class.java)
             startActivity(intent)
         }
 

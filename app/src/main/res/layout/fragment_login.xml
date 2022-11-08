@@ -46,7 +46,7 @@
         style="@style/TextAppearance.MaterialComponents.Body2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@id/et_email"
+        android:layout_above="@id/UNN"
         android:layout_marginStart="25dp"
         android:layout_marginBottom="24dp"
         android:fontFamily="@font/roboto_regular"
@@ -54,7 +54,7 @@
         android:textSize="17sp" />
 
     <EditText
-        android:id="@+id/et_email"
+        android:id="@+id/UNN"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_above="@id/et_password"
@@ -62,7 +62,7 @@
         android:layout_marginRight="20dp"
         android:background="@drawable/et_custom"
         android:fontFamily="@font/roboto_regular"
-        android:hint="@string/e_mail"
+        android:hint="@string/UNN"
         android:inputType="textEmailAddress"
         android:padding="15dp"
         android:textColor="#00796B"
@@ -104,6 +104,7 @@
         android:background="@drawable/btn_custom"
         android:fontFamily="@font/roboto_regular"
         android:text="@string/login"
+        android:onClick="sendToServer"
         android:textColor="@android:color/white" />
 
     <ImageView

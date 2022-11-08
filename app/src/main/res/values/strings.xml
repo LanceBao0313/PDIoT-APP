@@ -59,16 +59,67 @@
     <string name="action_sign_in_short">Sign in</string>
     <string name="welcome">"Welcome !"</string>
     <string name="invalid_username">Not a valid username</string>
-    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="invalid_password">Password must be >8 characters</string>
     <string name="login_failed">"Login failed"</string>
 
     <string name="swipe_left_for_register">Swipe Left for Register</string>
     <string name="login">Login</string>
     <string name="password">Password</string>
-    <string name="e_mail">Email</string>
+    <string name="invalid_unn">Please enter correct UNN.</string>>
+    <string name="UNN">UNN (sXXXXXXX)</string>
     <string name="tag">Sign in to view your historical activity!</string>
     <string name="swipe_right_for_login">Swipe Right for Login</string>
     <string name="register">Register</string>
     <string name="re_type_password">Re-type Password</string>
     <string name="your_name">Full Name</string>
+
+
+    <string name="viewGithub">View on GitHub</string>
+    <string name="reportProblem">Problem Report</string>
+    <string name="viewWebsite">Developer Website</string>
+    <string name="actionSave">Save to Gallery</string>
+
+    <string name="animateX">Animate X</string>
+    <string name="animateY">Animate Y</string>
+    <string name="animateXY">Animate XY</string>
+
+    <string name="actionToggleValues">Toggle Values</string>
+    <string name="actionToggleYValues">Toggle Y-Values</string>
+    <string name="actionToggleXValues">Toggle X-Values</string>
+
+    <string name="actionToggleIcons">Toggle Icons</string>
+    <string name="actionToggleHighlight">Toggle Highlight</string>
+    <string name="actionTogglePinch">Toggle PinchZoom</string>
+    <string name="actionToggleAutoScale">Toggle Auto Scale</string>
+
+    <string name="actionToggleLineValues">Toggle Line Values</string>
+    <string name="actionToggleBarValues">Toggle Bar Values</string>
+    <string name="actionToggleBarBorders">Toggle Bar Borders</string>
+    <string name="actionToggleFilled">Toggle Filled</string>
+    <string name="actionToggleCircles">Toggle Circles</string>
+    <string name="actionToggleCandleShadow">Toggle Shadow Color</string>
+
+    <string name="actionToggleCubic">Toggle Cubic</string>
+    <string name="actionToggleStepped">Toggle Stepped</string>
+    <string name="actionToggleHorizontalCubic">Toggle Horizontal Cubic</string>
+
+    <string name="actionAddEntry">Add Entry</string>
+    <string name="actionFeedMultiple">Add Multiple</string>
+    <string name="actionRemoveEntry">Remove Entry</string>
+    <string name="actionAddDataSet">Add Data Set</string>
+    <string name="actionRemoveDataSet">Remove Data Set</string>
+    <string name="actionClearChart">Clear chart</string>
+
+    <string name="actionTogglePercent">Toggle Percent</string>
+    <string name="actionToggleMinAngles">Toggle Minimum Angles</string>
+    <string name="actionToggleHole">Toggle Hole</string>
+    <string name="actionToggleCurvedSlices">Toggle Curved Slices</string>
+    <string name="actionDrawCenterText">Draw Center Text</string>
+    <string name="actionToggleHighlightCircle">Toggle Highlight Circle</string>
+    <string name="actionToggleRotation">Toggle Rotation</string>
+    <string name="actionToggleSpin">Spin Animation</string>
+
+    <string name="dash">-</string>
+    <string name="scrollViewStart">START OF SCROLLVIEW</string>
+    <string name="scrollViewEnd">END OF SCROLLVIEW</string>
 </resources>
