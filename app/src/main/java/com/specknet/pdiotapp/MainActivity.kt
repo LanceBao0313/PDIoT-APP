@@ -17,6 +17,7 @@ import androidx.core.app.ActivityCompat
 import com.google.android.material.snackbar.Snackbar
 import com.specknet.pdiotapp.bluetooth.BluetoothSpeckService
 import com.specknet.pdiotapp.bluetooth.ConnectingActivity
+import com.specknet.pdiotapp.history.BarChartActivity
 import com.specknet.pdiotapp.live.LiveDataActivity
 import com.specknet.pdiotapp.onboarding.OnBoardingActivity
 import com.specknet.pdiotapp.utils.Constants
@@ -113,7 +114,7 @@ class MainActivity : AppCompatActivity() {
 
         historyButton.setOnClickListener {
             //val intent = Intent(this, HistoricalData::class.java)
-            val intent = Intent(this, PieChartActivity::class.java)
+            val intent = Intent(this, BarChartActivity::class.java)
             startActivity(intent)
         }
 

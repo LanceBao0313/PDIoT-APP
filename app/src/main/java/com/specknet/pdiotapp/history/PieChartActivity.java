@@ -58,9 +58,9 @@ public class PieChartActivity extends DemoBase implements OnSeekBarChangeListene
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        setContentView(R.layout.activity_pie_chart);
+        setContentView(R.layout.activity_historical_data);
 
-        setTitle("PiePolylineChartActivity");
+        setTitle("Activity History");
 
         tvX = findViewById(R.id.tvXMax);
         tvY = findViewById(R.id.tvYMax);
@@ -107,7 +107,7 @@ public class PieChartActivity extends DemoBase implements OnSeekBarChangeListene
         // add a selection listener
         chart.setOnChartValueSelectedListener(this);
 
-        seekBarX.setProgress(4);
+        seekBarX.setProgress(7);
         seekBarY.setProgress(100);
 
         chart.animateY(1400, Easing.EaseInOutQuad);
@@ -181,11 +181,11 @@ public class PieChartActivity extends DemoBase implements OnSeekBarChangeListene
         chart.invalidate();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.pie, menu);
-        return true;
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.pie, menu);
+//        return true;
+//    }
 
 //    @Override
 //    public boolean onOptionsItemSelected(MenuItem item) {
@@ -295,13 +295,13 @@ public class PieChartActivity extends DemoBase implements OnSeekBarChangeListene
 
     private SpannableString generateCenterSpannableText() {
 
-        SpannableString s = new SpannableString("MPAndroidChart\ndeveloped by Philipp Jahoda");
-        s.setSpan(new RelativeSizeSpan(1.5f), 0, 14, 0);
-        s.setSpan(new StyleSpan(Typeface.NORMAL), 14, s.length() - 15, 0);
-        s.setSpan(new ForegroundColorSpan(Color.GRAY), 14, s.length() - 15, 0);
-        s.setSpan(new RelativeSizeSpan(.65f), 14, s.length() - 15, 0);
-        s.setSpan(new StyleSpan(Typeface.ITALIC), s.length() - 14, s.length(), 0);
-        s.setSpan(new ForegroundColorSpan(ColorTemplate.getHoloBlue()), s.length() - 14, s.length(), 0);
+        SpannableString s = new SpannableString("Activity History\ndeveloped by GroupT");
+        s.setSpan(new RelativeSizeSpan(1.5f), 0, 16, 0);
+        s.setSpan(new StyleSpan(Typeface.NORMAL), 16, s.length() - 6, 0);
+        s.setSpan(new ForegroundColorSpan(Color.GRAY), 16, s.length() - 6, 0);
+        s.setSpan(new RelativeSizeSpan(.65f), 16, s.length() - 6, 0);
+        s.setSpan(new StyleSpan(Typeface.ITALIC), s.length() - 16, s.length(), 0);
+        s.setSpan(new ForegroundColorSpan(ColorTemplate.getHoloBlue()), s.length() - 6, s.length(), 0);
         return s;
     }
 

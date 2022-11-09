@@ -10,6 +10,7 @@ import org.eazegraph.lib.models.PieModel
 
 
 
+
 class HistoricalData : AppCompatActivity() {
     // Create the object of TextView
     // and PieChart class
@@ -33,7 +34,7 @@ class HistoricalData : AppCompatActivity() {
         tvPython = findViewById<TextView>(R.id.tvPython)
         tvCPP = findViewById(R.id.tvCPP)
         tvJava = findViewById<TextView>(R.id.tvJava)
-        pieChart = findViewById(R.id.piechart)
+        //pieChart = findViewById(R.id.piechart)
 
         // Creating a method setData()
         // to set the text in text view and pie chart

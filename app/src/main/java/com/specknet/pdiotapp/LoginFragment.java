@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -73,13 +74,14 @@ public class LoginFragment extends Fragment {
             public void onClick(View v)
             {
                 String student_id = String.valueOf(UNN.getText());
-                String password = String.valueOf(Password.getEditText().getText());
+                String password = Password.getEditText().getText().toString();
+                Log.i("LoginData", "password is:  " + password);
 
                 if(student_id.length() == 8 && student_id.charAt(0) == 's' && isDigit(StringUtils.substring(student_id,1))){
-                    if (password != null){
+                    if (password.length() >= 8 && password.length() <= 16){
                         JSONObject json = new JSONObject();
                         Log.i("LoginData", "UNN is:  " + student_id);
-                        Log.i("LoginData", "password is:  " + password);
+
                         try {
                             json.put("student_id", student_id);
                             json.put("password", password);
