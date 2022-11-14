@@ -60,12 +60,16 @@
     <string name="welcome">"Welcome !"</string>
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be 8~16 characters</string>
-    <string name="login_failed">"Login failed"</string>
+    <string name="password_not_match">Password is not match</string>
+    <string name="invalid_chars">Password contains invalid characters</string>
+    <string name="login_failed">Login failed: Wrong user id or password</string>
+    <string name="register_failed">Register failed</string>
 
     <string name="swipe_left_for_register">Swipe Left for Register</string>
     <string name="login">Login</string>
     <string name="password">Password</string>
-    <string name="invalid_unn">Please enter correct UNN.</string>>
+    <string name="invalid_unn">Please enter correct UNN.</string>
+
     <string name="UNN">UNN (sXXXXXXX)</string>
     <string name="tag">Sign in to view your historical activity!</string>
     <string name="swipe_right_for_login">Swipe Right for Login</string>

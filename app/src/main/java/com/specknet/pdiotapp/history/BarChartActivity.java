@@ -43,11 +43,11 @@ public class BarChartActivity extends DemoBase {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_bar_chart);
+        setContentView(R.layout.activity_historical_data);
 
         setTitle("BarChartPositiveNegative");
 
-        chart = findViewById(R.id.chart1);
+        chart = findViewById(R.id.chart2);
         chart.setBackgroundColor(Color.WHITE);
         chart.setExtraTopOffset(-30f);
         chart.setExtraBottomOffset(10f);
@@ -202,20 +202,20 @@ public class BarChartActivity extends DemoBase {
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()) {
-            case R.id.viewGithub: {
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse("https://github.com/PhilJay/MPAndroidChart/blob/master/MPChartExample/src/com/xxmassdeveloper/mpchartexample/BarChartPositiveNegative.java"));
-                startActivity(i);
-                break;
-            }
-        }
-
-        return true;
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//
+//        switch (item.getItemId()) {
+//            case R.id.viewGithub: {
+//                Intent i = new Intent(Intent.ACTION_VIEW);
+//                i.setData(Uri.parse("https://github.com/PhilJay/MPAndroidChart/blob/master/MPChartExample/src/com/xxmassdeveloper/mpchartexample/BarChartPositiveNegative.java"));
+//                startActivity(i);
+//                break;
+//            }
+//        }
+//
+//        return true;
+//    }
 
     @Override
     public void saveToGallery() { /* Intentionally left empty */ }

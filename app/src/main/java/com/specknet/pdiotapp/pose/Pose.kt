@@ -20,6 +20,7 @@ import com.specknet.pdiotapp.ml.Model
 import com.specknet.pdiotapp.ml.TfLiteModel
 import com.specknet.pdiotapp.utils.Constants
 import com.specknet.pdiotapp.utils.RESpeckLiveData
+import com.specknet.pdiotapp.utils.ThingyLiveData
 import org.tensorflow.lite.DataType
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
 
@@ -74,19 +75,33 @@ class Pose : AppCompatActivity() {
 
                 if (action == Constants.ACTION_RESPECK_LIVE_BROADCAST) {
 
-                    val liveData =
+                    val liveData_ras =
                         intent.getSerializableExtra(Constants.RESPECK_LIVE_DATA) as RESpeckLiveData
-                    Log.d("Live", "onReceive: liveData = " + liveData)
+
+                    val liveData_thi =
+                        intent.getSerializableExtra(Constants.THINGY_LIVE_DATA) as ThingyLiveData
+
+                    Log.d("Live", "onReceive: liveData = " + liveData_ras)
 
                     // get all relevant intent contents
-                    val x = liveData.accelX
-                    val y = liveData.accelY
-                    val z = liveData.accelZ
-                    val g_x = liveData.gyro.x
-                    val g_y = liveData.gyro.y
-                    val g_z = liveData.gyro.z
+                    val x = liveData_ras.accelX
+                    val y = liveData_ras.accelY
+                    val z = liveData_ras.accelZ
+                    val g_x = liveData_ras.gyro.x
+                    val g_y = liveData_ras.gyro.y
+                    val g_z = liveData_ras.gyro.z
 
-                    val activity = classifyActivity(x, y, z, g_x, g_y, g_z)
+                    val thi_x = liveData_thi.accelX
+                    val thi_y = liveData_thi.accelY
+                    val thi_z = liveData_thi.accelZ
+
+
+
+
+
+                    // set up connection with server
+                    // if connected, use cloudClassifyActivity, otherwise use classifyActivity
+                    val activity = cloudClassifyActivity(x, y, z, g_x, g_y, g_z, thi_x, thi_y, thi_z)
                     if (activity != "None"){
                         resID = resources.getIdentifier(activity, "drawable", packageName)
                         Log.d("activity is:", "$activity  $resID")
@@ -163,6 +178,52 @@ class Pose : AppCompatActivity() {
         }
 
 
+    }
+
+    fun cloudClassifyActivity(x: Float, y: Float, z: Float, x1:Float, y1:Float, z1: Float, thi_x: Float, thi_y: Float, thi_z: Float): String {
+        if (counter <= 291){
+            this.tfInput.set(counter, x)
+            this.tfInput.set(counter+1, y)
+            this.tfInput.set(counter+2, z)
+            this.tfInput.set(counter+3, x1)
+            this.tfInput.set(counter+4, y1)
+            this.tfInput.set(counter+5, z1)
+            this.tfInput.set(counter+6, thi_x)
+            this.tfInput.set(counter+7, thi_y)
+            this.tfInput.set(counter+8, thi_z)
+
+            counter += 9
+            Log.d("input", "$tfInput")
+        }else if (counter > 291) {
+            val model = Model.newInstance(this)
+
+
+            // Creates inputs for reference.
+            val inputFeature0 = TensorBuffer.createFixedSize(intArrayOf(1, 50, 9), DataType.FLOAT32)
+            inputFeature0.loadArray(tfInput)
+
+            // convert to Json, then send this to the server
+
+            // Runs model inference and gets result.
+            val outputs = model.process(inputFeature0)
+            val outputFeature0 = outputs.outputFeature0AsTensorBuffer
+            val floatArray = outputFeature0.getFloatArray()
+            currentActivityIndex = 0
+            var maxProb = floatArray.max()
+            if (maxProb != null) {
+                currentActivityIndex = floatArray.indexOf(maxProb)
+                currentActivity = activities[currentActivityIndex]
+            }
+            Log.d("index of max", "${currentActivityIndex}")
+            Log.d("currentActivity", "${currentActivity}")
+
+            // Releases model resources if no longer used.
+            model.close()
+            this.tfInput = FloatArray(50 * 9) { 0.toFloat() }
+            counter = 0
+            return currentActivity
+        }
+        return "None"
     }
 
     fun classifyActivity(x: Float, y: Float, z: Float, x1:Float, y1:Float, z1: Float): String {

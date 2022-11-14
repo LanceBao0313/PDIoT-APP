@@ -1,6 +1,7 @@
 package com.specknet.pdiotapp;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
+import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -33,6 +35,8 @@ public class LoginFragment extends Fragment {
     TextInputLayout Password;
     Boolean userLoginState = false;
     TextView subtitle;
+    Context context;
+    Toast toast;
 
 
     public LoginFragment() {
@@ -50,7 +54,7 @@ public class LoginFragment extends Fragment {
         UNN = (EditText) view.findViewById(R.id.UNN);
         Password = (TextInputLayout) view.findViewById(R.id.et_password);
         subtitle = (TextView)  view.findViewById(R.id.tv_subtitle);
-
+        context = getActivity();
 
 
         setupClickListeners();
@@ -93,9 +97,14 @@ public class LoginFragment extends Fragment {
                         // Retrieve User Historical data
 
                         Boolean feedback = true;
-                        if(true){
+                        if(feedback){
                             userLoginState = true;
                             startActivity(new Intent(getActivity(), MainActivity.class));
+                            toast.makeText(context, "You are logged-in!", Toast.LENGTH_LONG).show();
+                            //toast.show();
+                        }else{
+                            subtitle.setText(getResources().getString(R.string.login_failed));
+                            subtitle.setTextColor(getResources().getColor(R.color.red));
                         }
                     } else{
                         subtitle.setText(getResources().getString(R.string.invalid_password));
