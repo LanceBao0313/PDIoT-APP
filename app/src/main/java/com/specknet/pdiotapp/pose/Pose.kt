@@ -13,6 +13,7 @@ import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.github.kittinunf.fuel.Fuel
+import com.github.kittinunf.fuel.core.extensions.jsonBody
 import com.google.gson.Gson
 import com.specknet.pdiotapp.R
 import com.specknet.pdiotapp.ml.Model
@@ -260,16 +261,19 @@ class Pose : AppCompatActivity() {
     fun cloudClassifyActivity(resData: FloatArray, thiData: FloatArray): String {
 
 
-        if (resData.size == 350 && thiData.size == 500){
+        if (counter_ras == 350 && counter_thi == 500){
 
+            val thiStr = thiDataFormater(thiData)
+            val resStr = resDataFormater(resData)
             //val model = Model.newInstance(this)
             val gson = Gson()
-            val json = gson.toJson(JsonDataParser("s1925715", tfInput_thi, tfInput_res))
+            val json = gson.toJson(JsonDataParser("s1925715", resStr, thiStr))
+            Log.d("http", json.toString())
 
             val (request, response, result) = Fuel.post("http://34.89.117.73:5000/predict")
-                .body(json)
+                .jsonBody("{ \"id\" : \"s1925715\", \"thi\" : ${thiStr}, \"res\" : ${resStr}}")
                 .responseString()
-            Log.d("http", "${resData.size}")
+
             when (result) {
                 is Result.Failure -> {
                     Log.d("http", "fail")
@@ -298,10 +302,39 @@ class Pose : AppCompatActivity() {
         return "None"
     }
 
+    fun resDataFormater(resData: FloatArray): String{
+        var str: String = "[["
+        var counter = 1
+        for (i in resData){
+            if(counter % 7 != 0){
+                str = str + i + ","
+            }else{
+                str = str + i + "],["
+            }
+            counter++
+        }
+        return str.dropLast(3)+"]]"
+    }
+
+    fun thiDataFormater(thiData: FloatArray): String{
+        var str: String = "[["
+        var counter = 1
+        for (i in thiData){
+            if(counter % 10 != 0){
+                str = str + i + ","
+            }else{
+                str = str + i + "],["
+            }
+            counter++
+        }
+        Log.d("thi_counter", "${counter}")
+        return str.dropLast(3)+"]]"
+    }
+
     data class JsonDataParser(
-        @SerializedName("id") val id:String,
-        @SerializedName("thi") val thi: FloatArray,
-        @SerializedName("res") val res: FloatArray
+        @SerializedName("id") val id: String,
+        @SerializedName("res") val res: String,
+        @SerializedName("thi") val thi: String
     )
 
 
