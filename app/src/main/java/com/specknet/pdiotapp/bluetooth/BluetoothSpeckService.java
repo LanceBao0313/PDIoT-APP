@@ -103,11 +103,14 @@ public class BluetoothSpeckService extends Service {
 
     private Observable<RxBleConnection> thingyConnection;
 
+    private Context context;
+
     public BluetoothSpeckService() {
     }
 
     @Override
     public void onCreate() {
+        context = getApplicationContext();
         Log.d(TAG, "onCreate: here");
         super.onCreate();
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O)
@@ -314,6 +317,7 @@ public class BluetoothSpeckService extends Service {
                         mIsRESpeckFound = true;
                         Log.i(TAG, "Connecting after scanning");
                         BluetoothSpeckService.this.connectToRESpeck();
+                        Toast.makeText(context, "RESpeck Connected Successfully!", Toast.LENGTH_LONG).show();
                     }
                 } else {
                     // Old UUID
@@ -330,6 +334,7 @@ public class BluetoothSpeckService extends Service {
                             RESPECK_BLE_ADDRESS = rxBleScanResult.getBleDevice().getMacAddress();
                             Log.i(TAG, "Connecting after scanning to: " + RESPECK_BLE_ADDRESS);
                             BluetoothSpeckService.this.connectToRESpeck();
+
                         }
                     }
                 }
@@ -342,6 +347,8 @@ public class BluetoothSpeckService extends Service {
                     mIsThingyFound = true;
                     Log.i(TAG, "Connecting after scanning");
                     BluetoothSpeckService.this.connectToThingy();
+                    Toast.makeText(context, "Thingy Connected Successfully!", Toast.LENGTH_LONG).show();
+
                 }
 
             }
@@ -427,6 +434,7 @@ public class BluetoothSpeckService extends Service {
                     }, Constants.RECONNECTION_TIMEOUT_MILLIS);
                 }
             }
+
         }, throwable -> {
             Log.e(TAG, "Error occured while listening to RESpeck connection state changes: " + throwable.getMessage());
         });
@@ -495,6 +503,7 @@ public class BluetoothSpeckService extends Service {
                     }, Constants.RECONNECTION_TIMEOUT_MILLIS);
                 }
             }
+            //Toast.makeText(context, "RESpeck Connected Successfully!", Toast.LENGTH_LONG).show();
         }, throwable -> {
             Log.e(TAG, "Error occured while listening to RESpeck connection state changes: " + throwable.getMessage());
         });
@@ -547,6 +556,7 @@ public class BluetoothSpeckService extends Service {
                     Intent respeckFoundIntent = new Intent(Constants.ACTION_RESPECK_CONNECTED);
                     respeckFoundIntent.putExtra(Constants.Config.RESPECK_UUID, RESPECK_UUID);
                     sendBroadcast(respeckFoundIntent);
+                    //Toast.makeText(context, "RESpeck Connected Successfully!", Toast.LENGTH_LONG).show();
 
                 })
                 .flatMap(notificationObservable -> notificationObservable)
@@ -613,6 +623,7 @@ public class BluetoothSpeckService extends Service {
                     Intent thingyFoundIntent = new Intent(Constants.ACTION_THINGY_CONNECTED);
                     thingyFoundIntent.putExtra(Constants.Config.THINGY_UUID, THINGY_UUID);
                     sendBroadcast(thingyFoundIntent);
+                    //Toast.makeText(context, "Thingy Connected Successfully!", Toast.LENGTH_LONG).show();
 
                 })
                 .flatMap(notificationObservable -> notificationObservable)

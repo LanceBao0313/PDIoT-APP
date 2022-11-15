@@ -7,9 +7,11 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.specknet.pdiotapp.MainActivity2;
 import com.specknet.pdiotapp.R;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 import android.graphics.Color;
@@ -19,6 +21,7 @@ import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
 import android.view.WindowManager;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.charts.BarChart;
@@ -31,9 +34,11 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.specknet.pdiotapp.notimportant.DemoBase;
 
 import android.graphics.Typeface;
+import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -41,6 +46,7 @@ import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.specknet.pdiotapp.pose.Pose;
 
 import java.util.ArrayList;
 
@@ -58,12 +64,19 @@ public class HistoricalData2 extends DemoBase implements OnSeekBarChangeListener
 
     private Typeface tf;
 
+    Button hourButton;
+    Button dayButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_historical_data);
+
+        Button hourButton = findViewById(R.id.hour);
+        Button dayButton = findViewById(R.id.day);
+
 
         chart_bar = findViewById(R.id.chart2);
         chart_bar.setBackgroundColor(Color.WHITE);
@@ -202,6 +215,17 @@ public class HistoricalData2 extends DemoBase implements OnSeekBarChangeListener
             }
         });
     }
+
+    public void getHourData(View v)
+    {
+        Toast.makeText(this, "Clicked on Hour Button", Toast.LENGTH_SHORT).show();
+    }
+
+    public void getDayData(View v)
+    {
+        Toast.makeText(this, "Clicked on Day Button", Toast.LENGTH_SHORT).show();
+    }
+
 
     private void setDataBar(List<HistoricalData2.Data> dataList) {
 

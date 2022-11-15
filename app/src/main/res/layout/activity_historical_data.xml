@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/swipeContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/color_white"
     tools:context=".MainActivity">
 
@@ -58,11 +57,11 @@
                         android:id="@+id/seekBar2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
                         android:layout_alignParentLeft="true"
+                        android:layout_alignParentBottom="true"
                         android:layout_margin="8dp"
-                        android:layout_toLeftOf="@+id/tvYMax"
                         android:layout_marginRight="5dp"
+                        android:layout_toLeftOf="@+id/tvYMax"
                         android:max="200"
                         android:paddingBottom="12dp" />
 
@@ -72,9 +71,9 @@
                         android:layout_height="wrap_content"
                         android:layout_above="@+id/seekBar2"
                         android:layout_margin="8dp"
+                        android:layout_marginRight="5dp"
                         android:layout_marginBottom="35dp"
                         android:layout_toLeftOf="@+id/tvXMax"
-                        android:layout_marginRight="5dp"
                         android:max="25"
                         android:paddingBottom="12dp" />
 
@@ -84,10 +83,10 @@
                         android:layout_height="wrap_content"
                         android:layout_alignBottom="@+id/seekBar1"
                         android:layout_alignParentRight="true"
-                        android:text="@string/dash"
-                        android:layout_marginBottom="15dp"
                         android:layout_marginRight="10dp"
+                        android:layout_marginBottom="15dp"
                         android:gravity="right"
+                        android:text="@string/dash"
                         android:textAppearance="?android:attr/textAppearanceMedium" />
 
                     <TextView
@@ -96,10 +95,10 @@
                         android:layout_height="wrap_content"
                         android:layout_alignBottom="@+id/seekBar2"
                         android:layout_alignParentRight="true"
-                        android:text="@string/dash"
-                        android:layout_marginBottom="15dp"
                         android:layout_marginRight="10dp"
+                        android:layout_marginBottom="15dp"
                         android:gravity="right"
+                        android:text="@string/dash"
                         android:textAppearance="?android:attr/textAppearanceMedium" />
 
                 </LinearLayout>
@@ -125,6 +124,31 @@
                     android:layout_marginTop="15dp" />
 
             </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:cardBackgroundColor="#00FFFFFF"
+                tools:visibility="visible">
+
+                <Button
+                    android:id="@+id/day"
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="210dp"
+                    android:text="1 day"
+                    android:onClick="getDayData"/>
+
+                <Button
+                    android:id="@+id/hour"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="90dp"
+                    android:text="1 hour"
+                    android:onClick="getHourData" />
+
+            </androidx.cardview.widget.CardView>
+
         </LinearLayout>
     </ScrollView>
 
