@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">pdiot app</string>
+    <string name="app_name">ThiRes</string>
     <string name="ble_name">Name: %1$s</string>
     <string name="ble_mac">MAC: %1$s</string>
     <string name="ble_signal">Signal: %1$d</string>
