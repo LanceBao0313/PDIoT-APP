@@ -90,7 +90,7 @@ class Pose : AppCompatActivity() {
                     Log.d("Live", "onReceive: liveData = " + liveData_res)
 
                     // get all relevant intent contents
-                    val phone_time = liveData_res.phoneTimestamp
+                    val phone_time = liveData_res.respeckTimestamp - 1668800000000
                     val ras_x = liveData_res.accelX
                     val ras_y = liveData_res.accelY
                     val ras_z = liveData_res.accelZ
@@ -119,9 +119,10 @@ class Pose : AppCompatActivity() {
                             updateActivity()
                         }
                         first_loop = false
-                    }else if(send_counter_thi == 25 && send_counter_res == 25 && !first_loop){
+                    }
+                    else if(send_counter_thi == 25 && send_counter_res == 25 && !first_loop){
                         val activity = cloudClassifyActivity(tfInput_res_1, tfInput_thi_1,3)
-                        if (activity != "None"){
+                        if (activity != "None" && activity != "desk_work"){
                             resID = resources.getIdentifier(activity, "drawable", packageName)
                             Log.d("activity is:", "$activity  $resID")
                             //pose.setImageResource(resID)
@@ -164,7 +165,7 @@ class Pose : AppCompatActivity() {
                     Log.d("Live", "onReceive: liveData = " + liveData_thi)
 
                     // get all relevant intent contents
-                    val phone_time = liveData_thi.phoneTimestamp
+                    val phone_time = liveData_thi.phoneTimestamp - 1668800000000
                     val thi_x = liveData_thi.accelX
                     val thi_y = liveData_thi.accelY
                     val thi_z = liveData_thi.accelZ
@@ -200,15 +201,15 @@ class Pose : AppCompatActivity() {
                         }
                         first_loop = false
                     }
-//                    else if(send_counter_thi == 25 && send_counter_res == 25 && !first_loop){
-//                        val activity = cloudClassifyActivity(tfInput_res_1, tfInput_thi_1,3)
-//                        if (activity != "None"){
-//                            resID = resources.getIdentifier(activity, "drawable", packageName)
-//                            Log.d("activity is:", "$activity  $resID")
-//                            //pose.setImageResource(resID)
-//                            updateActivity()
-//                        }
-//                    }
+                    else if(send_counter_thi == 25 && send_counter_res == 25 && !first_loop){
+                        val activity = cloudClassifyActivity(tfInput_res_1, tfInput_thi_1,3)
+                        if (activity != "None" && activity != "desk_work"){
+                            resID = resources.getIdentifier(activity, "drawable", packageName)
+                            Log.d("activity is:", "$activity  $resID")
+                            //pose.setImageResource(resID)
+                            updateActivity()
+                        }
+                    }
                     storeThiData(phone_time.toFloat(), thi_x, thi_y, thi_z, thi_g_x, thi_g_y, thi_g_z, thi_m_x, thi_m_y, thi_m_z)
                 }
             }
@@ -338,6 +339,7 @@ class Pose : AppCompatActivity() {
             //val gson = Gson()
             //val json = gson.toJson(JsonDataParser("s1925715", resStr, thiStr))
             Log.d("http", "data1 sent!")
+            Log.d("timestamp:", "$thiStr")
 
             val (request, response, result) = Fuel.post("http://34.89.117.73:5000/predict")
                 .jsonBody("{ \"id\" : \"s1925715\", \"thi\" : ${thiStr}, \"res\" : ${resStr}}")

@@ -5,29 +5,27 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.google.android.material.snackbar.Snackbar
 import com.specknet.pdiotapp.bluetooth.BluetoothSpeckService
 import com.specknet.pdiotapp.bluetooth.ConnectingActivity
-import com.specknet.pdiotapp.history.AnotherBarActivity
-import com.specknet.pdiotapp.history.BarChartActivity
 import com.specknet.pdiotapp.history.HistoricalData2
 import com.specknet.pdiotapp.live.LiveDataActivity
 import com.specknet.pdiotapp.onboarding.OnBoardingActivity
+import com.specknet.pdiotapp.pose.Pose
 import com.specknet.pdiotapp.utils.Constants
 import com.specknet.pdiotapp.utils.Utils
-import com.specknet.pdiotapp.history.HistoricalData
-import com.specknet.pdiotapp.history.PieChartActivity
-import com.specknet.pdiotapp.pose.Pose
 import kotlinx.android.synthetic.main.activity_main.*
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -38,6 +36,9 @@ class MainActivity : AppCompatActivity() {
     lateinit var historyButton: Button
     lateinit var poseButton: Button
     lateinit var loginButton: Button
+    lateinit var logout: Button
+
+    var userLoginState = false
 
 
     // permissions
@@ -61,15 +62,26 @@ class MainActivity : AppCompatActivity() {
 
         // check whether the onboarding screen should be shown
         val sharedPreferences = getSharedPreferences(Constants.PREFERENCES_FILE, Context.MODE_PRIVATE)
+
+
         if (sharedPreferences.contains(Constants.PREF_USER_FIRST_TIME)) {
             isUserFirstTime = false
         }
         else {
             isUserFirstTime = true
+            sharedPreferences.edit().putBoolean(Constants.USER_LOGIN_STATE,false).apply()
+            sharedPreferences.edit().putString(Constants.USER_ID,"Login").apply()
             sharedPreferences.edit().putBoolean(Constants.PREF_USER_FIRST_TIME, false).apply()
             val introIntent = Intent(this, OnBoardingActivity::class.java)
             startActivity(introIntent)
         }
+        if(sharedPreferences.getString(Constants.USER_ID, "login") != "login"){
+            userLoginState = true
+        }
+
+
+
+
 
         liveProcessingButton = findViewById(R.id.live_button)
         pairingButton = findViewById(R.id.ble_button)
@@ -77,6 +89,20 @@ class MainActivity : AppCompatActivity() {
         historyButton = findViewById(R.id.history_button)
         poseButton = findViewById(R.id.pose_button)
         loginButton = findViewById(R.id.loginButton)
+        logout = findViewById(R.id.logoutButton)
+
+//        if (userLoginState){
+//            loginButton.setText(sharedPreferences.getString(Constants.USER_ID,"Login"))
+//        }
+//
+//        val intent = intent
+//        var value = "Login"
+//        if(intent.getStringExtra("buttontxt") != null){
+//            value = intent.getStringExtra("buttontxt").toString()
+//        }
+//
+//        loginButton.setText(value)
+        loginButton.setText(sharedPreferences.getString(Constants.USER_ID,"Login"))
 
         permissionAlertDialog = AlertDialog.Builder(this)
 
@@ -116,8 +142,13 @@ class MainActivity : AppCompatActivity() {
 
         historyButton.setOnClickListener {
             //val intent = Intent(this, HistoricalData::class.java)
-            val intent = Intent(this, HistoricalData2::class.java)
-            startActivity(intent)
+            if (userLoginState){
+                val intent = Intent(this, HistoricalData2::class.java)
+                startActivity(intent)
+            }else{
+                Toast.makeText(this,"Please login to view your activity history", Toast.LENGTH_SHORT).show()
+            }
+
         }
 
         poseButton.setOnClickListener {
@@ -126,6 +157,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         loginButton.setOnClickListener {
+
             val intent = Intent(this, MainActivity2::class.java)
             startActivity(intent)
         }

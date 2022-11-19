@@ -104,7 +104,6 @@
         android:background="@drawable/btn_custom"
         android:fontFamily="@font/roboto_regular"
         android:text="@string/login"
-        android:onClick="sendToServer"
         android:textColor="@android:color/white" />
 
     <ImageView

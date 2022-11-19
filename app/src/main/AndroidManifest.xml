@@ -19,6 +19,7 @@
     <uses-feature android:name="android.hardware.camera" />
 
     <application
+        android:name=".utils.GlobalStates"
         android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -33,6 +34,7 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
         <activity
             android:name=".history.BarChartActivity"
             android:exported="false">

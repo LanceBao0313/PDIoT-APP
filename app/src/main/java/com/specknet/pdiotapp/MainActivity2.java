@@ -17,6 +17,7 @@ import java.util.ArrayList;
 public class MainActivity2 extends AppCompatActivity {
 
     // buttons and textviews
+    ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,4 +57,5 @@ public class MainActivity2 extends AppCompatActivity {
     protected void goToLiveActivity(View v){
         startActivity(new Intent(MainActivity2.this, Pose.class));
     }
+
 }

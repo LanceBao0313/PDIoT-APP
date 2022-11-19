@@ -102,6 +102,8 @@ public class Constants {
 
 
     public static final String PREF_USER_FIRST_TIME = "user_first_time";
+    public static final String USER_LOGIN_STATE = "user_login_state";
+    public static final String USER_ID = "user_id";
 
     // Broadcast strings
     public static final String ACTION_RESPECK_RECORDING_PAUSE = "com.specknet.respeck.ACTION_RESPECK_RECORDING_PAUSE";
