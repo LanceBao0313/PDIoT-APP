@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var historyButton: Button
     lateinit var poseButton: Button
     lateinit var loginButton: Button
-    lateinit var logout: Button
+    lateinit var logoutButton: Button
 
     var userLoginState = false
 
@@ -89,7 +89,7 @@ class MainActivity : AppCompatActivity() {
         historyButton = findViewById(R.id.history_button)
         poseButton = findViewById(R.id.pose_button)
         loginButton = findViewById(R.id.loginButton)
-        logout = findViewById(R.id.logoutButton)
+        logoutButton = findViewById(R.id.logoutButton)
 
 //        if (userLoginState){
 //            loginButton.setText(sharedPreferences.getString(Constants.USER_ID,"Login"))
@@ -120,6 +120,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun setupClickListeners() {
+        logoutButton.setOnClickListener {
+            val sharedPreferences = getSharedPreferences(Constants.PREFERENCES_FILE, Context.MODE_PRIVATE)
+            sharedPreferences.edit().putBoolean(Constants.USER_LOGIN_STATE,false).apply()
+            userLoginState = false
+            sharedPreferences.edit().putString(Constants.USER_ID,"Login").apply()
+            loginButton.setText(sharedPreferences.getString(Constants.USER_ID,"Login"))
+            Toast.makeText(this,"You are logged out!", Toast.LENGTH_SHORT).show()
+
+        }
         liveProcessingButton.setOnClickListener {
             val intent = Intent(this, LiveDataActivity::class.java)
             startActivity(intent)

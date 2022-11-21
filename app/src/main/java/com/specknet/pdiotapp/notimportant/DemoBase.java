@@ -28,10 +28,7 @@ public abstract class DemoBase extends AppCompatActivity implements ActivityComp
     };
 
     protected final String[] parties = new String[] {
-            "Sitting", "Standing", "Running","Walking", "Lying", "Movement", "Up/Down stairs", "Party G", "Party H",
-            "Party I", "Party J", "Party K", "Party L", "Party M", "Party N", "Party O", "Party P",
-            "Party Q", "Party R", "Party S", "Party T", "Party U", "Party V", "Party W", "Party X",
-            "Party Y", "Party Z"
+            "Sitting", "Standing", "Running","Walking", "Lying", "Movement", "Up/Down stairs"
     };
 
     private static final int PERMISSION_STORAGE = 0;

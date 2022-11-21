@@ -347,6 +347,7 @@ public class BluetoothSpeckService extends Service {
                     mIsThingyFound = true;
                     Log.i(TAG, "Connecting after scanning");
                     BluetoothSpeckService.this.connectToThingy();
+
                     Toast.makeText(context, "Thingy Connected Successfully!", Toast.LENGTH_LONG).show();
 
                 }

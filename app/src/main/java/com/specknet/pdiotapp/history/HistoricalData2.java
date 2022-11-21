@@ -1,5 +1,11 @@
 package com.specknet.pdiotapp.history;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
@@ -7,11 +13,14 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.specknet.pdiotapp.MainActivity;
 import com.specknet.pdiotapp.MainActivity2;
 import com.specknet.pdiotapp.R;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import android.graphics.Color;
@@ -47,20 +56,41 @@ import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.specknet.pdiotapp.pose.Pose;
+import com.specknet.pdiotapp.utils.Constants;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 import java.text.DecimalFormat;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class HistoricalData2 extends DemoBase implements OnSeekBarChangeListener,
         OnChartValueSelectedListener {
     private SwipeRefreshLayout swipeContainer;
+    public List<String> serverData;
+    public ArrayList<Integer> color_list_bar;
+    public ArrayList<Integer> color_list_pie;
+
+    int colour1 = ColorTemplate.VORDIPLOM_COLORS[0];
+    int colour2 = ColorTemplate.JOYFUL_COLORS[0];
+    int colour3 = ColorTemplate.COLORFUL_COLORS[0];
+    int colour4 = ColorTemplate.LIBERTY_COLORS[0];
+    int colour5 = ColorTemplate.PASTEL_COLORS[0];
+    int colour6 = ColorTemplate.JOYFUL_COLORS[1];
+    int colour7 = ColorTemplate.LIBERTY_COLORS[1];
+
+    public String lastType = "minute";
 
     private BarChart chart_bar;
     private PieChart chart_pie;
     private SeekBar seekBarX, seekBarY;
     private TextView tvX, tvY;
+    private Context context;
 
     private Typeface tf;
 
@@ -76,6 +106,7 @@ public class HistoricalData2 extends DemoBase implements OnSeekBarChangeListener
 
         Button hourButton = findViewById(R.id.hour);
         Button dayButton = findViewById(R.id.day);
+        context = getApplicationContext();
 
 
         chart_bar = findViewById(R.id.chart2);
@@ -119,22 +150,7 @@ public class HistoricalData2 extends DemoBase implements OnSeekBarChangeListener
 
 
         // THIS IS THE ORIGINAL DATA YOU WANT TO PLOT
-        final List<HistoricalData2.Data> data = new ArrayList<>();
 
-        for(int i = 0;i< 100;i++){
-            data.add(new HistoricalData2.Data((float) i, 100f, String.valueOf(i)));
-        }
-
-        xAxis.setValueFormatter(new ValueFormatter() {
-            @Override
-            public String getFormattedValue(float value) {
-                return data.get(Math.min(Math.max((int) value, 0), data.size()-1)).xAxisValue;
-            }
-
-
-        });
-
-        setDataBar(data);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -211,6 +227,11 @@ public class HistoricalData2 extends DemoBase implements OnSeekBarChangeListener
                 // once the network request has completed successfully.
                 chart_pie.animateXY(1400, 1400);
                 chart_bar.animateX(1400);
+                if(lastType.equals("hour")){
+                    getHourData(chart_bar);
+                }else if(lastType.equals("minute")){
+                    getMinData(chart_pie);
+                }
                 swipeContainer.setRefreshing(false);
             }
         });
@@ -218,12 +239,189 @@ public class HistoricalData2 extends DemoBase implements OnSeekBarChangeListener
 
     public void getHourData(View v)
     {
-        Toast.makeText(this, "Clicked on Hour Button", Toast.LENGTH_SHORT).show();
+        lastType = "hour";
+        SharedPreferences sharedPreferences = getSharedPreferences(Constants.PREFERENCES_FILE, Context.MODE_PRIVATE);
+
+        JSONObject json = new JSONObject();
+
+        //String feedback = "false";
+        try {
+            json.put("student_id", sharedPreferences.getString(Constants.USER_ID, ""));
+            json.put("get_type", "hour");
+
+            makeGet(json);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void getDayData(View v)
+    public void getMinData(View v)
     {
-        Toast.makeText(this, "Clicked on Day Button", Toast.LENGTH_SHORT).show();
+        lastType = "minute";
+        SharedPreferences sharedPreferences = getSharedPreferences(Constants.PREFERENCES_FILE, Context.MODE_PRIVATE);
+
+        JSONObject json = new JSONObject();
+
+        //String feedback = "false";
+        try {
+            json.put("student_id", sharedPreferences.getString(Constants.USER_ID, ""));
+            json.put("get_type", "miniute");
+
+            makeGet(json);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void makeGet(JSONObject json) {
+        Log.i("history", json.toString());
+        String url = "http://34.89.117.73:5000/history";
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.POST, url, json, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        serverData = stringToList(response.toString());
+                        Log.i("history", serverData.toString());
+                        final List<HistoricalData2.Data> data = new ArrayList<>();
+                        color_list_bar = new ArrayList<>();
+                        for(int i = 0;i< 60;i++){
+                            if(serverData.get(i) == null || serverData.get(i).equals("") || serverData.get(i).equals("\"\"")){
+                                color_list_bar.add(colour1);
+                                data.add(new HistoricalData2.Data((float) i, 0f, String.valueOf(59-i)));
+                            } else {
+                                Log.i("history", serverData.get(i));
+                                String type = serverData.get(i).replace("\"","");
+                                Log.i("history", String.valueOf(serverData.get(i).equals("\"general_movement\"")));
+                                switch(type) {
+                                    case "sitting":
+                                    case "sitting_bent_backward":
+                                    case "sitting_bent_forward":
+                                    case "desk_work":
+                                        color_list_bar.add(colour1);
+                                        data.add(new HistoricalData2.Data((float) i, 100f, String.valueOf(59-i)));
+                                        break;
+                                    case "ascending_stairs":
+                                    case "descending_stairs":
+                                        color_list_bar.add(colour2);
+                                        data.add(new HistoricalData2.Data((float) i, 100f, String.valueOf(59-i)));
+                                        break;
+                                    case "lying_down_left":
+                                    case "lying_down_right":
+                                    case "lying_down_on_back":
+                                    case "lying_down_on_stomach":
+                                        color_list_bar.add(colour3);
+                                        data.add(new HistoricalData2.Data((float) i, 100f, String.valueOf(59-i)));
+                                        break;
+                                    case "walking":
+                                        color_list_bar.add(colour4);
+                                        data.add(new HistoricalData2.Data((float) i, 100f, String.valueOf(59-i)));
+                                        break;
+                                    case "running":
+                                        color_list_bar.add(colour5);
+                                        data.add(new HistoricalData2.Data((float) i, 100f, String.valueOf(59-i)));
+                                        break;
+                                    case "standing":
+                                        color_list_bar.add(colour6);
+                                        data.add(new HistoricalData2.Data((float) i, 100f, String.valueOf(59-i)));
+                                        break;
+                                    case "general_movement":
+                                        Log.i("history", serverData.get(i));
+                                        color_list_bar.add(colour7);
+                                        data.add(new HistoricalData2.Data((float) i, 100f, String.valueOf(59-i)));
+                                        break;
+                                    default:
+                                        Log.i("history", "missed！！");
+                                        // code block
+                                }
+                            }
+
+                        }
+                        XAxis xAxis = chart_bar.getXAxis();
+                        xAxis.setValueFormatter(new ValueFormatter() {
+                            @Override
+                            public String getFormattedValue(float value) {
+                                return data.get(Math.min(Math.max((int) value, 0), data.size()-1)).xAxisValue;
+                            }
+
+                        });
+
+                        setDataBar(data);
+
+                        final List<HistoricalData2.Data> data_pie = new ArrayList<>();
+                        color_list_pie = new ArrayList<>();
+                        for(int i = 60;i< 67;i++){
+                            Log.i("history", serverData.get(i));
+                            String type = serverData.get(i).replace("\"","");
+                            List<String> sector = Arrays.asList(type.split(":"));
+                            String name = sector.get(0);
+                            float percent = Float.parseFloat(sector.get(1));
+                            if (percent != 0){
+                                switch(name) {
+                                    case "Lying":
+                                        color_list_pie.add(colour3);
+                                        data_pie.add(new HistoricalData2.Data(percent, 0f, "Lying"));
+                                        break;
+                                    case "Movement":
+                                        color_list_pie.add(colour7);
+                                        data_pie.add(new HistoricalData2.Data(percent, 0f, "Movement"));
+                                        break;
+                                    case "Running":
+                                        color_list_pie.add(colour5);
+                                        data_pie.add(new HistoricalData2.Data(percent, 0f, "Running"));
+                                        break;
+                                    case "Sitting":
+                                        color_list_pie.add(colour1);
+                                        data_pie.add(new HistoricalData2.Data(percent, 0f, "Sitting"));
+                                        break;
+                                    case "Standing":
+                                        color_list_pie.add(colour6);
+                                        data_pie.add(new HistoricalData2.Data(percent, 0f, "Standing"));
+                                        break;
+                                    case "Up\\/Down stairs":
+                                        color_list_pie.add(colour2);
+                                        data_pie.add(new HistoricalData2.Data(percent, 0f, "Up/Down stairs"));
+                                        break;
+                                    case "Walking":
+                                        color_list_pie.add(colour4);
+                                        data_pie.add(new HistoricalData2.Data(percent, 0f, "Walking"));
+                                        break;
+                                    default:
+                                        Log.i("history", "missed！！");
+                                        // code block
+                                }
+                            }
+
+
+                        }
+
+                        setDataPie(data_pie);
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO: Handle error
+                        Log.i("history", error.toString());
+                        Toast.makeText(context, "Server error!", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        requestQueue.add(jsonObjectRequest);
+    }
+
+    public List<String> stringToList(String string){
+        String replace = string.replace("[","");
+        String replace1 = replace.replace("]","");
+        String replace2 = replace1.replace("{","");
+        String replace3 = replace2.replace("}","");
+        String replace4 = replace3.replace("\"data\":","");
+        String replace5 = replace4.replace("\"percentage\":","");
+        List<String> myList = new ArrayList<String>(Arrays.asList(replace5.split(",")));
+        return myList;
     }
 
 
@@ -232,22 +430,6 @@ public class HistoricalData2 extends DemoBase implements OnSeekBarChangeListener
         ArrayList<BarEntry> values = new ArrayList<>();
         //List<Integer> colors = new ArrayList<>();
 
-        ArrayList<Integer> colors = new ArrayList<>();
-        ArrayList<Integer> color_list = new ArrayList<>();
-        int colour1 = ColorTemplate.VORDIPLOM_COLORS[0];
-        int colour2 = ColorTemplate.JOYFUL_COLORS[0];
-        int colour3 = ColorTemplate.COLORFUL_COLORS[0];
-        int colour4 = ColorTemplate.LIBERTY_COLORS[0];
-        int colour5 = ColorTemplate.PASTEL_COLORS[0];
-        int colour6 = ColorTemplate.JOYFUL_COLORS[1];
-        int colour7 = ColorTemplate.LIBERTY_COLORS[1];
-        color_list.add(colour1);
-        color_list.add(colour2);
-        color_list.add(colour3);
-        color_list.add(colour4);
-        color_list.add(colour5);
-        color_list.add(colour6);
-        color_list.add(colour7);
 
         for (int i = 0; i < dataList.size(); i++) {
 
@@ -256,43 +438,43 @@ public class HistoricalData2 extends DemoBase implements OnSeekBarChangeListener
             values.add(entry);
 
             // specific colors
-            colors.add(color_list.get(i % 7));
+           //colors.add(color_list.get(i % 7));
 
         }
 
         BarDataSet set;
 
-        if (chart_bar.getData() != null &&
-                chart_bar.getData().getDataSetCount() > 0) {
-            set = (BarDataSet) chart_bar.getData().getDataSetByIndex(0);
-            set.setValues(values);
-            chart_bar.getData().notifyDataChanged();
-            chart_bar.notifyDataSetChanged();
-        } else {
+//        if (chart_bar.getData() != null &&
+//                chart_bar.getData().getDataSetCount() > 0) {
+//            set = (BarDataSet) chart_bar.getData().getDataSetByIndex(0);
+//            set.setValues(values);
+//            chart_bar.getData().notifyDataChanged();
+//            chart_bar.notifyDataSetChanged();
+//        } else {
             set = new BarDataSet(values, "Values");
-            set.setColors(colors);
-            set.setValueTextColors(colors);
+            set.setColors(color_list_bar);
+            set.setValueTextColors(color_list_bar);
 
             BarData data = new BarData(set);
-            data.setValueTextSize(13f);
+            data.setValueTextSize(0f);
             data.setValueTypeface(tfRegular);
             data.setValueFormatter(new HistoricalData2.Formatter());
             data.setBarWidth(0.8f);
 
             chart_bar.setData(data);
             chart_bar.invalidate();
-        }
+        //}
         chart_bar.animateX(1400);
     }
 
-    private void setDataPie(int count, float range) {
+    private void setDataPie(List<HistoricalData2.Data> dataList) {
 
         ArrayList<PieEntry> entries = new ArrayList<>();
 
         // NOTE: The order of the entries when being added to the entries array determines their position around the center of
         // the chart.
-        for (int i = 0; i < count; i++) {
-            entries.add(new PieEntry((float) (Math.random() * range) + range / 5, parties[i % parties.length]));
+        for (int i = 0; i < dataList.size(); i++) {
+            entries.add(new PieEntry(dataList.get(i).xValue, dataList.get(i).xAxisValue));
         }
 
         PieDataSet dataSet = new PieDataSet(entries, "Election Results");
@@ -301,26 +483,26 @@ public class HistoricalData2 extends DemoBase implements OnSeekBarChangeListener
 
         // add a lot of colors
 
-        ArrayList<Integer> colors = new ArrayList<>();
+//        ArrayList<Integer> colors = new ArrayList<>();
+//
+//        for (int c : ColorTemplate.VORDIPLOM_COLORS)
+//            colors.add(c);
+//
+//        for (int c : ColorTemplate.JOYFUL_COLORS)
+//            colors.add(c);
+//
+//        for (int c : ColorTemplate.COLORFUL_COLORS)
+//            colors.add(c);
+//
+//        for (int c : ColorTemplate.LIBERTY_COLORS)
+//            colors.add(c);
+//
+//        for (int c : ColorTemplate.PASTEL_COLORS)
+//            colors.add(c);
+//
+//        colors.add(ColorTemplate.getHoloBlue());
 
-        for (int c : ColorTemplate.VORDIPLOM_COLORS)
-            colors.add(c);
-
-        for (int c : ColorTemplate.JOYFUL_COLORS)
-            colors.add(c);
-
-        for (int c : ColorTemplate.COLORFUL_COLORS)
-            colors.add(c);
-
-        for (int c : ColorTemplate.LIBERTY_COLORS)
-            colors.add(c);
-
-        for (int c : ColorTemplate.PASTEL_COLORS)
-            colors.add(c);
-
-        colors.add(ColorTemplate.getHoloBlue());
-
-        dataSet.setColors(colors);
+        dataSet.setColors(color_list_pie);
         //dataSet.setSelectionShift(0f);
 
 
@@ -404,7 +586,7 @@ public class HistoricalData2 extends DemoBase implements OnSeekBarChangeListener
         tvX.setText(String.valueOf(seekBarX.getProgress()));
         tvY.setText(String.valueOf(seekBarY.getProgress()));
 
-        setDataPie(seekBarX.getProgress(), seekBarY.getProgress());
+        //setDataPie(seekBarX.getProgress(), seekBarY.getProgress());
     }
 
     @Override
@@ -444,4 +626,6 @@ public class HistoricalData2 extends DemoBase implements OnSeekBarChangeListener
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {}
+
+
 }

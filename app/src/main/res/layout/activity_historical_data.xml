@@ -136,8 +136,8 @@
                     android:layout_width="100dp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="210dp"
-                    android:text="1 day"
-                    android:onClick="getDayData"/>
+                    android:onClick="getMinData"
+                    android:text="5 Min" />
 
                 <Button
                     android:id="@+id/hour"

@@ -90,7 +90,7 @@ class Pose : AppCompatActivity() {
                     Log.d("Live", "onReceive: liveData = " + liveData_res)
 
                     // get all relevant intent contents
-                    val phone_time = liveData_res.respeckTimestamp - 1668800000000
+                    val phone_time = liveData_res.phoneTimestamp - 1660000000000
                     val ras_x = liveData_res.accelX
                     val ras_y = liveData_res.accelY
                     val ras_z = liveData_res.accelZ
@@ -165,7 +165,7 @@ class Pose : AppCompatActivity() {
                     Log.d("Live", "onReceive: liveData = " + liveData_thi)
 
                     // get all relevant intent contents
-                    val phone_time = liveData_thi.phoneTimestamp - 1668800000000
+                    val phone_time = liveData_thi.phoneTimestamp - 1660000000000
                     val thi_x = liveData_thi.accelX
                     val thi_y = liveData_thi.accelY
                     val thi_z = liveData_thi.accelZ
@@ -203,7 +203,7 @@ class Pose : AppCompatActivity() {
                     }
                     else if(send_counter_thi == 25 && send_counter_res == 25 && !first_loop){
                         val activity = cloudClassifyActivity(tfInput_res_1, tfInput_thi_1,3)
-                        if (activity != "None" && activity != "desk_work"){
+                        if (activity != "None"){
                             resID = resources.getIdentifier(activity, "drawable", packageName)
                             Log.d("activity is:", "$activity  $resID")
                             //pose.setImageResource(resID)
@@ -238,7 +238,7 @@ class Pose : AppCompatActivity() {
     }
 
     fun setUpImage(){
-        resID = resources.getIdentifier("joke1", "drawable", packageName)
+        resID = resources.getIdentifier("general_movement", "drawable", packageName)
         activityImage = findViewById(R.id.imageView)
         activityImage.setImageResource(resID)
         activityImage.invalidate()
@@ -339,10 +339,11 @@ class Pose : AppCompatActivity() {
             //val gson = Gson()
             //val json = gson.toJson(JsonDataParser("s1925715", resStr, thiStr))
             Log.d("http", "data1 sent!")
-            Log.d("timestamp:", "$thiStr")
-
+            Log.d("timestamp333:", "$thiStr")
+            val sharedPreferences = getSharedPreferences(Constants.PREFERENCES_FILE, Context.MODE_PRIVATE)
+            val student_id = sharedPreferences.getString(Constants.USER_ID,"")
             val (request, response, result) = Fuel.post("http://34.89.117.73:5000/predict")
-                .jsonBody("{ \"id\" : \"s1925715\", \"thi\" : ${thiStr}, \"res\" : ${resStr}}")
+                .jsonBody("{ \"id\" : \"$student_id\", \"thi\" : ${thiStr}, \"res\" : ${resStr}}")
                 .responseString()
 
             when (result) {
@@ -379,9 +380,11 @@ class Pose : AppCompatActivity() {
             //val gson = Gson()
             //val json = gson.toJson(JsonDataParser("s1925715", resStr, thiStr))
             Log.d("http", "data2 sent!")
-
+            Log.d("timestamp333:", "$thiStr")
+            val sharedPreferences = getSharedPreferences(Constants.PREFERENCES_FILE, Context.MODE_PRIVATE)
+            val student_id = sharedPreferences.getString(Constants.USER_ID,"")
             val (request, response, result) = Fuel.post("http://34.89.117.73:5000/predict")
-                .jsonBody("{ \"id\" : \"s1925715\", \"thi\" : ${thiStr}, \"res\" : ${resStr}}")
+                .jsonBody("{ \"id\" : \"$student_id\", \"thi\" : ${thiStr}, \"res\" : ${resStr}}")
                 .responseString()
 
             when (result) {
@@ -414,16 +417,19 @@ class Pose : AppCompatActivity() {
 //            val thiStr = thiDataFormater(thiData_2.sliceArray(250..749))
 //            val resStr = resDataFormater(resData_2.sliceArray(175..524))
             val thiStr = thiDataFormater(thiData_2.sliceArray(500..749) + thiData_2.sliceArray(0..249))
-            val resStr = resDataFormater(resData_2.sliceArray(350..524) + thiData_2.sliceArray(0..174))
+            val resStr = resDataFormater(resData_2.sliceArray(350..524) + resData_2.sliceArray(0..174))
             //val model = Model.newInstance(this)
             //val gson = Gson()
             //val json = gson.toJson(JsonDataParser("s1925715", resStr, thiStr))
             Log.d("http", "data3 sent!")
 
-            val (request, response, result) = Fuel.post("http://34.89.117.73:5000/predict")
-                .jsonBody("{ \"id\" : \"s1925715\", \"thi\" : ${thiStr}, \"res\" : ${resStr}}")
-                .responseString()
+            val sharedPreferences = getSharedPreferences(Constants.PREFERENCES_FILE, Context.MODE_PRIVATE)
+            val student_id = sharedPreferences.getString(Constants.USER_ID,"")
 
+            val (request, response, result) = Fuel.post("http://34.89.117.73:5000/predict")
+                .jsonBody("{ \"id\" : \"$student_id\", \"thi\" : ${thiStr}, \"res\" : ${resStr}}")
+                .responseString()
+            Log.d("student_id:", "$student_id")
             when (result) {
                 is Result.Failure -> {
                     Log.d("http", "fail")

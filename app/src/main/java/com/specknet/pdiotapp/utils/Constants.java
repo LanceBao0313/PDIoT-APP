@@ -144,6 +144,10 @@ public class Constants {
     public static final String ACTION_THINGY_DISCONNECTED = "com.specknet.pdiotapp.THINGY_DISCONNECTED";
     public static final String THINGY_LIVE_DATA = "thingy_live_data";
 
+    public static final boolean THINGY_ON = false;
+    public static final boolean RESPECK_ON = false;
+
+
 
 
 }
