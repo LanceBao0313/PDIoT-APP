@@ -481,26 +481,7 @@ public class HistoricalData2 extends DemoBase implements OnSeekBarChangeListener
         dataSet.setSliceSpace(3f);
         dataSet.setSelectionShift(5f);
 
-        // add a lot of colors
 
-//        ArrayList<Integer> colors = new ArrayList<>();
-//
-//        for (int c : ColorTemplate.VORDIPLOM_COLORS)
-//            colors.add(c);
-//
-//        for (int c : ColorTemplate.JOYFUL_COLORS)
-//            colors.add(c);
-//
-//        for (int c : ColorTemplate.COLORFUL_COLORS)
-//            colors.add(c);
-//
-//        for (int c : ColorTemplate.LIBERTY_COLORS)
-//            colors.add(c);
-//
-//        for (int c : ColorTemplate.PASTEL_COLORS)
-//            colors.add(c);
-//
-//        colors.add(ColorTemplate.getHoloBlue());
 
         dataSet.setColors(color_list_pie);
         //dataSet.setSelectionShift(0f);

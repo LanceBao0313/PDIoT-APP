@@ -64,14 +64,9 @@ class Pose : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //val resources: Resources = context.resources
-        //val resourceId: Int = resources.getIdentifier(agent, "drawable", context.packageName)
-        //resID = resources.getIdentifier("standing", "drawable", packageName)
+
         setContentView(R.layout.activity_pose)
 
-
-        //val pose = findViewById<View>(R.id.imageView) as ImageView
-        //pose.setImageResource(resID)
 
         setUpImage()
 
@@ -115,7 +110,6 @@ class Pose : AppCompatActivity() {
                         if (activity != "None"){
                             resID = resources.getIdentifier(activity, "drawable", packageName)
                             Log.d("activity is:", "$activity  $resID")
-                            //pose.setImageResource(resID)
                             updateActivity()
                         }
                         first_loop = false
@@ -125,18 +119,10 @@ class Pose : AppCompatActivity() {
                         if (activity != "None" && activity != "desk_work"){
                             resID = resources.getIdentifier(activity, "drawable", packageName)
                             Log.d("activity is:", "$activity  $resID")
-                            //pose.setImageResource(resID)
                             updateActivity()
                         }
                     }
                     storeResData(phone_time.toFloat(), ras_x, ras_y, ras_z, ras_g_x, ras_g_y, ras_g_z)
-//                    val activity = cloudClassifyActivity(tfInput_res_1, tfInput_thi_1)
-//                    if (activity != "None"){
-//                        resID = resources.getIdentifier(activity, "drawable", packageName)
-//                        Log.d("activity is:", "$activity  $resID")
-//                        //pose.setImageResource(resID)
-//                        updateActivity()
-//                    }
                     time += 1
                 }
             }
@@ -147,7 +133,6 @@ class Pose : AppCompatActivity() {
         handlerThreadRespeck.start()
         looperRespeck = handlerThreadRespeck.looper
         val handlerRespeck = Handler(looperRespeck)
-        //handlerRespeck.post(Runnable { pose.setImageResource(resID)})
         this.registerReceiver(respeckLiveUpdateReceiver, filterTestRespeck, null, handlerRespeck)
 
 
@@ -183,8 +168,11 @@ class Pose : AppCompatActivity() {
 
                     Log.d("send_counter", "$send_counter_thi  $send_counter_res")
                     if (send_counter_thi == 50 && send_counter_res == 50){
-                        val activity = cloudClassifyActivity(tfInput_res_1, tfInput_thi_1,1)
+                        var activity = cloudClassifyActivity(tfInput_res_1, tfInput_thi_1,1)
                         if (activity != "None"){
+                            if(activity.equals("desk_work")){
+                                activity = "sitting"
+                            }
                             resID = resources.getIdentifier(activity, "drawable", packageName)
                             Log.d("activity is:", "$activity  $resID")
                             //pose.setImageResource(resID)
@@ -192,8 +180,11 @@ class Pose : AppCompatActivity() {
                         }
                         first_loop = false
                     }else if (send_counter_thi == 75 && send_counter_res == 75){
-                        val activity = cloudClassifyActivity(tfInput_res_1, tfInput_thi_1,2)
+                        var activity = cloudClassifyActivity(tfInput_res_1, tfInput_thi_1,2)
                         if (activity != "None"){
+                            if(activity.equals("desk_work")){
+                                activity = "sitting"
+                            }
                             resID = resources.getIdentifier(activity, "drawable", packageName)
                             Log.d("activity is:", "$activity  $resID")
                             //pose.setImageResource(resID)
@@ -202,8 +193,11 @@ class Pose : AppCompatActivity() {
                         first_loop = false
                     }
                     else if(send_counter_thi == 25 && send_counter_res == 25 && !first_loop){
-                        val activity = cloudClassifyActivity(tfInput_res_1, tfInput_thi_1,3)
+                        var activity = cloudClassifyActivity(tfInput_res_1, tfInput_thi_1,3)
                         if (activity != "None"){
+                            if(activity.equals("desk_work")){
+                                activity = "sitting"
+                            }
                             resID = resources.getIdentifier(activity, "drawable", packageName)
                             Log.d("activity is:", "$activity  $resID")
                             //pose.setImageResource(resID)
@@ -224,14 +218,14 @@ class Pose : AppCompatActivity() {
     }
 
     fun updateActivity() {
+
         // take the first element from the queue
         // and update the graph with it
         runOnUiThread {
             //activityImage.notifyDataSetChanged()
             activityImage.setImageResource(resID)
             activityImage.invalidate()
-            //activityImage.setVisibleXRangeMaximum(150f)
-            //activityImage.moveViewToX(respeckChart.lowestVisibleX + 40)
+
         }
 
 
@@ -293,19 +287,8 @@ class Pose : AppCompatActivity() {
 
             counter_res_1 += 7
             send_counter_res += 1
-            //Log.d("res_input", "${tfInput_res.size/7}")
         }
 
-//        if(counter_res_1 <= 518){
-//            this.tfInput_res_1.set(counter_res_1, time)
-//            this.tfInput_res_1.set(counter_res_1+1, x)
-//            this.tfInput_res_1.set(counter_res_1+2, y)
-//            this.tfInput_res_1.set(counter_res_1+3, z)
-//            this.tfInput_res_1.set(counter_res_1+4, x1)
-//            this.tfInput_res_1.set(counter_res_1+5, y1)
-//            this.tfInput_res_1.set(counter_res_1+6, z1)
-//            counter_res_1 += 7
-//        }
     }
 
     fun storeThiData(time: Float,thi_x: Float, thi_y: Float, thi_z: Float, thi_g_x: Float, thi_g_y: Float, thi_g_z: Float, thi_m_x: Float, thi_m_y: Float, thi_m_z: Float){
@@ -325,19 +308,16 @@ class Pose : AppCompatActivity() {
 
             counter_thi_1 += 10
             send_counter_thi += 1
-            //Log.d("thi_input", "${tfInput_thi.size/10}")
         }
-
     }
 
+
     fun cloudClassifyActivity(resData_2: FloatArray, thiData_2: FloatArray, flag: Int): String {
-        //if (counter_res_1 >= 350 && counter_thi_1 >= 500 && (counter_thi_1 != 525 || counter_res_1 != 750)){
+
         if(flag == 1){
             val thiStr = thiDataFormater(thiData_2.sliceArray(0..499))
             val resStr = resDataFormater(resData_2.sliceArray(0..349))
-            //val model = Model.newInstance(this)
-            //val gson = Gson()
-            //val json = gson.toJson(JsonDataParser("s1925715", resStr, thiStr))
+
             Log.d("http", "data1 sent!")
             Log.d("timestamp333:", "$thiStr")
             val sharedPreferences = getSharedPreferences(Constants.PREFERENCES_FILE, Context.MODE_PRIVATE)
@@ -361,12 +341,6 @@ class Pose : AppCompatActivity() {
                 }
             }
 
-            // Releases model resources if no longer used.
-            //model.close()
-//            this.tfInput_res_1 = FloatArray(50 * 7) { 0.toFloat() }
-//            this.tfInput_thi_1 = FloatArray(50 * 10) { 0.toFloat() }
-//            counter_res_1 = 0
-//            counter_thi_1 = 0
             Log.d("currentActivity", currentActivity)
             return currentActivity
         }
@@ -376,9 +350,7 @@ class Pose : AppCompatActivity() {
 
             val thiStr = thiDataFormater(thiData_2.sliceArray(250..749))
             val resStr = resDataFormater(resData_2.sliceArray(175..524))
-            //val model = Model.newInstance(this)
-            //val gson = Gson()
-            //val json = gson.toJson(JsonDataParser("s1925715", resStr, thiStr))
+
             Log.d("http", "data2 sent!")
             Log.d("timestamp333:", "$thiStr")
             val sharedPreferences = getSharedPreferences(Constants.PREFERENCES_FILE, Context.MODE_PRIVATE)
@@ -402,10 +374,6 @@ class Pose : AppCompatActivity() {
                 }
             }
 
-            // Releases model resources if no longer used.
-            //model.close()
-            //this.tfInput_res_1 = FloatArray(75 * 7) { 0.toFloat() }
-            //this.tfInput_thi_1 = FloatArray(75 * 10) { 0.toFloat() }
             counter_res_1 = 0
             counter_thi_1 = 0
             send_counter_res = 0
@@ -414,13 +382,10 @@ class Pose : AppCompatActivity() {
             return currentActivity
         }
         if(flag == 3){
-//            val thiStr = thiDataFormater(thiData_2.sliceArray(250..749))
-//            val resStr = resDataFormater(resData_2.sliceArray(175..524))
+
             val thiStr = thiDataFormater(thiData_2.sliceArray(500..749) + thiData_2.sliceArray(0..249))
             val resStr = resDataFormater(resData_2.sliceArray(350..524) + resData_2.sliceArray(0..174))
-            //val model = Model.newInstance(this)
-            //val gson = Gson()
-            //val json = gson.toJson(JsonDataParser("s1925715", resStr, thiStr))
+
             Log.d("http", "data3 sent!")
 
             val sharedPreferences = getSharedPreferences(Constants.PREFERENCES_FILE, Context.MODE_PRIVATE)
@@ -445,53 +410,11 @@ class Pose : AppCompatActivity() {
                 }
             }
 
-            // Releases model resources if no longer used.
-            //model.close()
-            //this.tfInput_res_1 = FloatArray(75 * 7) { 0.toFloat() }
-            //this.tfInput_thi_1 = FloatArray(75 * 10) { 0.toFloat() }
+
 
             Log.d("currentActivity", currentActivity)
             return currentActivity
         }
-
-//        if (counter_res == 350 && counter_thi == 500){
-//
-//            val thiStr = thiDataFormater(thiData_1)
-//            val resStr = resDataFormater(resData_1)
-//            //val model = Model.newInstance(this)
-//            val gson = Gson()
-//            val json = gson.toJson(JsonDataParser("s1925715", resStr, thiStr))
-//            //Log.d("counter_ras_1", "${counter_ras_1}")
-//
-//            val (request, response, result) = Fuel.post("http://34.89.117.73:5000/predict")
-//                .jsonBody("{ \"id\" : \"s1925715\", \"thi\" : ${thiStr}, \"res\" : ${resStr}}")
-//                .responseString()
-//
-//            when (result) {
-//                is Result.Failure -> {
-//                    Log.d("http", "fail")
-//                    val ex = result.getException()
-//                    currentActivity = "None"
-//                    println(ex)
-//                }
-//                is Result.Success -> {
-//                    Log.d("http", "success")
-//                    val data = result.get()
-//                    currentActivity = data
-//                    //println(data)
-//                }
-//            }
-//
-//            // Releases model resources if no longer used.
-//            //model.close()
-//            this.tfInput_res = FloatArray(50 * 7) { 0.toFloat() }
-//            this.tfInput_thi = FloatArray(50 * 10) { 0.toFloat() }
-//            counter_res = 0
-//            counter_thi = 0
-//            Log.d("counter_ras", "reset!!!!")
-//            Log.d("currentActivity", currentActivity)
-//            return currentActivity
-//        }
 
 
         return "None"
