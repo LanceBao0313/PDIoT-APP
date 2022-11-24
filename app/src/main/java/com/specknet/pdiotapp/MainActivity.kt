@@ -70,11 +70,12 @@ class MainActivity : AppCompatActivity() {
         else {
             isUserFirstTime = true
             sharedPreferences.edit().putBoolean(Constants.USER_LOGIN_STATE,false).apply()
-            sharedPreferences.edit().putString(Constants.USER_ID,"Login").apply()
+            sharedPreferences.edit().putString(Constants.USER_ID,"login").apply()
             sharedPreferences.edit().putBoolean(Constants.PREF_USER_FIRST_TIME, false).apply()
             val introIntent = Intent(this, OnBoardingActivity::class.java)
             startActivity(introIntent)
         }
+
         if(sharedPreferences.getString(Constants.USER_ID, "login") != "login"){
             userLoginState = true
         }
